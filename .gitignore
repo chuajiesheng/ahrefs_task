@@ -1,3 +1,5 @@
+._d
+
 *.annot
 *.cmo
 *.cma
@@ -7,3 +9,6 @@
 *.cmx
 *.cmxs
 *.cmxa
+
+server
+client
