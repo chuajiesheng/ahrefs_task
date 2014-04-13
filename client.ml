@@ -8,6 +8,7 @@ let receive s =
   let rec read c =
     let (loop, str) = try (true, input_line c) with
                         End_of_file -> (false, "Remote connection ended")
+                      | Sys_error (msg) -> (false, msg)
     in
     match (loop, str) with
       (true, str) -> printf "> %s\n%!" str; read c
@@ -53,6 +54,7 @@ let _ =
   let _ = printf "- Connecting to %s:%d.\n%!" addr port in
   let sock = socket PF_INET SOCK_STREAM 0 in
   setsockopt sock SO_KEEPALIVE true;
-  connect sock (ADDR_INET (inet_addr_of_string addr, port));
+  let _ = try connect sock (ADDR_INET (inet_addr_of_string addr, port)) with
+    Unix_error (msg, _, _) -> printf "- %s\n%!" (error_message msg) in
   let _ = Thread.create receive sock in
   read_and_send sock
