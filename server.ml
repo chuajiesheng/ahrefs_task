@@ -17,21 +17,20 @@ let rec search_and_bind addr port =
   with
     e -> search_and_bind addr (port + 1)
 
-let accept_and_reject sock =
+let rec accept_and_reject sock =
   let (s, addr) = accept sock in
-  printf "- Accept non-main connection";
-  shutdown s SHUTDOWN_SEND;
-  close s
+  close s;
+  accept_and_reject sock
 
 let rec accept_loop sock =
   let (s, addr) = accept sock in
   printf "- Connected to %s\n%!" (get_addr addr);
   try
+    let _ = Thread.create accept_and_reject sock in
     let _ = Thread.create receive s in
     read_and_send s;
   with
-    e -> eprintf "Caught: %s\n%!" (Printexc.to_string e);
-  accept_and_reject sock
+    e -> eprintf "Caught: %s\n%!" (Printexc.to_string e)
 
 let _ =
   setsockopt sock SO_REUSEADDR true;
