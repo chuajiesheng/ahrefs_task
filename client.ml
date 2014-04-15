@@ -12,7 +12,7 @@ let _ =
   in
   let port = try int_of_string Sys.argv.(2)
              with _ ->
-               let port = 15000 in
+               let port = 1024 in
                printf "- Using default port, %d\n%!" port;
                port
   in
