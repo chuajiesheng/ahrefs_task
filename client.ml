@@ -4,14 +4,14 @@ open Thread
 open Helper
 
 let _ =
-  let addr = try Sys.argv.(1) with
-               Invalid_argument "index out of bounds" ->
+  let addr = try Sys.argv.(1)
+             with _ ->
                let addr = "127.0.0.1" in
                printf "- Using default IP address, %s\n%!" addr;
                addr
   in
-  let port = try int_of_string Sys.argv.(2) with
-               Invalid_argument "index out of bounds" ->
+  let port = try int_of_string Sys.argv.(2)
+             with _ ->
                let port = 15000 in
                printf "- Using default port, %d\n%!" port;
                port
@@ -25,5 +25,5 @@ let _ =
       let _ = Thread.create receive sock in
       read_and_send sock;
     with
-      Unix_error (msg, _, _) -> printf "- %s\n%!" (error_message msg) in
+      e -> eprintf "Caught: %s\n%!" (Printexc.to_string e) in
   start ()
