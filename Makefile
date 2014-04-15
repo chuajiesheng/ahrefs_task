@@ -7,14 +7,14 @@ export ANNONATE = yes
 
 # Define project "server"
 define PROJ_server
-  SOURCES = server.ml
+  SOURCES = helper.ml server.ml
   RESULT = server
 endef
 export PROJ_server
 
 # Define project "client"
 define PROJ_client
-  SOURCES = client.ml
+  SOURCES = helper.ml client.ml
   RESULT = client
 endef
 export PROJ_client
