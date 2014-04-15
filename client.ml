@@ -19,7 +19,11 @@ let _ =
   let _ = printf "- Connecting to %s:%d.\n%!" addr port in
   let sock = socket PF_INET SOCK_STREAM 0 in
   setsockopt sock SO_KEEPALIVE true;
-  let _ = try connect sock (ADDR_INET (inet_addr_of_string addr, port)) with
-    Unix_error (msg, _, _) -> printf "- %s\n%!" (error_message msg) in
-  let _ = Thread.create receive sock in
-  read_and_send sock
+  let start () =
+    try
+      connect sock (ADDR_INET (inet_addr_of_string addr, port));
+      Thread.create receive sock;
+      read_and_send sock;
+    with
+      Unix_error (msg, _, _) -> printf "- %s\n%!" (error_message msg) in
+  start ()
