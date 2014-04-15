@@ -10,7 +10,6 @@ let receive_socket cin =
 
 let receive_err s e =
   eprintf "Caught: %s\n%!" (Printexc.to_string e);
-  try shutdown s SHUTDOWN_SEND with e -> ();
   close s;
   Pervasives.exit 1
 
@@ -34,7 +33,6 @@ let send cout str =
 
 let send_err s e =
   eprintf "Caught: %s\n%!" (Printexc.to_string e);
-  try shutdown s SHUTDOWN_RECEIVE with e -> ();
   close s;
   Pervasives.exit 1
 
