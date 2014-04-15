@@ -22,7 +22,7 @@ let _ =
   let start () =
     try
       connect sock (ADDR_INET (inet_addr_of_string addr, port));
-      Thread.create receive sock;
+      let _ = Thread.create receive sock in
       read_and_send sock;
     with
       Unix_error (msg, _, _) -> printf "- %s\n%!" (error_message msg) in

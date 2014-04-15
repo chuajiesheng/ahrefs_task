@@ -47,4 +47,5 @@ let read_and_send s =
       send cout str;
       loop ()
     with e -> send_err s e in
-  loop ()
+  let _ = loop () in
+  ()

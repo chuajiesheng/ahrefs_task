@@ -18,6 +18,9 @@ let _ =
   setsockopt sock SO_REUSEADDR true;
   let port = 15000 in
   printf "- Listening on %s\n%!" (string_of_int port);
-  bind sock (ADDR_INET (inet_addr_of_string "0.0.0.0", port));
-  listen sock 5;
-  accept_loop sock
+  try
+    bind sock (ADDR_INET (inet_addr_of_string "0.0.0.0", port));
+    listen sock 5;
+    accept_loop sock
+  with
+    e -> eprintf "Caught: %s\n%!" (Printexc.to_string e);
